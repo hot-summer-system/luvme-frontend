@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "252404852599",
+    "project_id": "luvme-frontend",
+    "storage_bucket": "luvme-frontend.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:252404852599:android:938a79d6ea34908cf0e372",
+        "android_client_info": {
+          "package_name": "com.hotsummer.luvmefrontend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "252404852599-iuu16pk2jn512lod5io7j8q215id4gpd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hotsummer.luvmefrontend",
+            "certificate_hash": "078c7620457c865e4a3af1ec2ba98e376e240c1e"
+          }
+        },
+        {
+          "client_id": "252404852599-l4guqqshe769eulce6maj5se7p9tl6gm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hotsummer.luvmefrontend",
+            "certificate_hash": "4de54dffb00f85ade6e8d3e6b36b04b51a30d168"
+          }
+        },
+        {
+          "client_id": "252404852599-bfgeti42ibci6pto0rkcmjps90chu5oa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPQozEtC9FG4pw7f87BZ5Lq7y72FLIVe8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "252404852599-bfgeti42ibci6pto0rkcmjps90chu5oa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
