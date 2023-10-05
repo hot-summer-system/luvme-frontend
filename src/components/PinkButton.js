@@ -12,12 +12,13 @@ export default function PinkButton(props) {
 }
 const styles = StyleSheet.create({
   btn: {
-    marginTop: 50,
-    marginHorizontal: 50,
+    width: 200,
+    marginTop: 10,
     backgroundColor: '#ED8AA8',
     borderRadius: 20,
     paddingVertical: 10,
     paddingHorizontal: 20,
+    alignSelf: 'center',
   },
   btnText: {
     color: 'white',

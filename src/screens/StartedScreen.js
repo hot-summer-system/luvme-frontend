@@ -4,9 +4,10 @@ import Swiper from 'react-native-swiper'
 import { useNavigation } from '@react-navigation/native'
 import { login } from '../api/login'
 import PinkButton from '../components/PinkButton'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// import auth from '@react-native-firebase/auth'
-// import { GoogleSigninButton, GoogleSignin } from '@react-native-google-signin/google-signin'
+import auth from '@react-native-firebase/auth'
+import { GoogleSigninButton, GoogleSignin } from '@react-native-google-signin/google-signin'
 
 const slides = [
     {
@@ -31,31 +32,23 @@ export default function StartedScreen() {
     // GoogleSignin.configure({
     //     webClientId: "252404852599-bfgeti42ibci6pto0rkcmjps90chu5oa.apps.googleusercontent.com",
     // })
-    // const onGoogleButtonPress = async () => {
-    //     try {
-    //         // Check if your device supports Google Play
-    //         await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-    //         // Get the users ID token
-    //         const { idToken } = await GoogleSignin.signIn();
-    //         const data = await login(idToken);
-    //         if (data.status === "NONFULLFILL") {
-    //             navigation.navigate('FillInfo');
-    //         } else if (data.isTest === false) {
-    //             navigation.navigate('Questions')
-    //         } else {
-    //             navigation.navigate('Home')
-    //         }
-    //         // Create a Google credential with the token
-    //         // const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-
-    //         // Sign-in the user with the credential
-    //         // const user_sign_in = auth().signInWithCredential(googleCredential);
-    //         // console.log(user_sign_in);
-    //         // return auth().signInWithCredential(googleCredential);
-    //     } catch (error) {
-    //         console.error('Google Sign-In Error:', error);
-    //     }
-    // }
+    const onGoogleButtonPress = async () => {
+        // Check if your device supports Google Play
+        // await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+        // // Get the users ID token
+        // const { idToken } = await GoogleSignin.signIn();
+        // await AsyncStorage.setItem('idToken', idToken);
+        const data = await login();
+        console.log(data);
+        const userId = data.userId;
+        if (data.status === "NONFULLFILL") {
+            navigation.navigate('FillInfo', { userId });
+        } else if (data.isTest === false) {
+            navigation.navigate('Questions')
+        } else {
+            navigation.navigate('Home')
+        }
+    }
     return (
         <View style={styles.container}>
             <Swiper
@@ -77,12 +70,12 @@ export default function StartedScreen() {
             </Swiper>
             <View style={{ height: 200 }}>
                 <Text style={styles.signUpText}>Signup now, to save your progress & analysis</Text>
-                {/* <GoogleSigninButton
+                <GoogleSigninButton
                     style={styles.signUpButton}
                     title="Google Sign-In"
-                    onPress={() => onGoogleButtonPress().then(() => console.log('Signed in with Google!'))}
-                /> */}
-                <PinkButton onClick={() => navigation.navigate('Root', { screen: 'Home' })} text="FullFill" />
+                    onPress={() => onGoogleButtonPress()}
+                />
+                <PinkButton onClick={() => navigation.navigate('Root', { screen: 'Home' })} text="Home" />
             </View>
         </View>
     )

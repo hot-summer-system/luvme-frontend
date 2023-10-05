@@ -10,7 +10,7 @@ import BottomTabNavigator from './BottomTabNavigator'
 const Stack = createNativeStackNavigator();
 const StackNavigator = () => {
     return (
-        <Stack.Navigator initialRouteName="FillInfo">
+        <Stack.Navigator initialRouteName="Question">
             <Stack.Screen name="FillInfo" component={FillInfoScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Question" component={QuestionScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Landing" component={LandingScreen} options={{ headerShown: false }} />

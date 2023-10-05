@@ -14,22 +14,29 @@ export default function ResultScreen() {
             const data = await getResultById(resultId);
             setResult(data)
         }
+        getResult()
     }, [])
     return (
-        <View style={styles.container}>
-            <Image
-                source={require('../images/full_logo.png')}
-                style={styles.image}
-            />
-            <Text style={styles.resultText}>{result.content}</Text>
-            {/* <View style={styles.infoContainer}>
-                <Text style={styles.infoTitle}>Feature of your skin</Text>
-                <Text style={styles.infoText}>{result.feature1}</Text>
-                <Text style={styles.infoText}>{result.feature2}</Text>
-            </View> */}
-            <PinkButton text='Skincare Routines' />
-            <PinkButton onClick={() => navigation.navigate('Root', { screen: 'Home' })} text='Recommend' />
-        </View>
+        <>
+            {result && (
+                <View style={styles.container}>
+                    <Image
+                        source={require('../images/full_logo.png')}
+                        style={styles.image}
+                    />
+                    <Text style={styles.resultText}>{result.content}</Text>
+                    {/* <View style={styles.infoContainer}>
+                        <Text style={styles.infoTitle}>Feature of your skin</Text>
+                        <Text style={styles.infoText}>{result.feature1}</Text>
+                        <Text style={styles.infoText}>{result.feature2}</Text>
+                    </View> */}
+                    <View style={{ position: 'absolute', bottom: 50 }}>
+                        <PinkButton text='Skincare Routines' />
+                        <PinkButton onClick={() => navigation.navigate('Root', { screen: 'Home' })} text='Recommend' />
+                    </View>
+                </View>
+            )}
+        </>
     );
 };
 

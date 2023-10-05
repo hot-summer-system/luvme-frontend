@@ -1,4 +1,5 @@
 import axios from "axios";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const url = "https://hot-summer-service.onrender.com";
 const instance = axios.create({
@@ -8,12 +9,18 @@ const instance = axios.create({
   },
 });
 
+const getIdToken = async () => {
+  const idToken = await AsyncStorage.getItem('idToken');
+  if (idToken !== null) {
+    return idToken;
+  }
+};
+
 instance.interceptors.request.use(
   (config) => {
-    //đổi cái này thành idToken, idToken lưu trong async store
-    const accessToken = user?.accessToken;
-    if (accessToken) {
-      config.headers["Authorization"] = `Bearer ${accessToken}`;
+    const idToken = getIdToken()
+    if (idToken) {
+      config.headers["Authorization"] = `Bearer ${idToken}`;
     }
     return config;
   },

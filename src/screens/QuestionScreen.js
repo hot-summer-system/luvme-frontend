@@ -2,6 +2,7 @@ import { View, Text, TouchableOpacity, FlatList, StyleSheet } from 'react-native
 import React, { useState, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { getFirstQuestion, getQuestion } from '../api/questions';
+import PinkButton from '../components/PinkButton';
 
 
 export default function QuestionScreen() {
@@ -24,11 +25,12 @@ export default function QuestionScreen() {
     };
 
     const handleNextQuestion = async () => {
-        const resultId = questions[currentQuestionIndex].answers.find(function (answer) {
-            return answer.answerId == selectedAnswerId;
-        }).resultId
-        if (resultId) {
-            const data = await getQuestion(questions[currentQuestionIndex]?.answers.linkedQuestionId);
+        const selectedAnswer = questions[currentQuestionIndex].answers.find((answer) => answer.answerId === selectedAnswerId);
+        const resultId = selectedAnswer.resultId
+        const linkedQuestionId = selectedAnswer.linkedQuestionId;
+        console.log(selectedAnswer)
+        if (linkedQuestionId) {
+            const data = await getQuestion(linkedQuestionId);
             setQuestions([...questions, data]);
             setSelectedAnswerId(null);
             setCurrentQuestionIndex(questions.length);
@@ -43,7 +45,6 @@ export default function QuestionScreen() {
             setQuestions(newQuestions)
             setSelectedAnswerId(null);
             setCurrentQuestionIndex(currentQuestionIndex - 1);
-            console.log(questions)
         } else {
             // Handle end of questions (e.g., navigate to result screen)
             console.log('This is the first question');
@@ -63,16 +64,14 @@ export default function QuestionScreen() {
                         ]}
                         onPress={() => handleAnswerPress(item.answerId)}
                     >
-                        <Text style={[styles.answerButtonText, item.answerId === selectedAnswerId && styles.selectedAnswerText]}>{item}</Text>
+                        <Text style={[styles.answerButtonText, item.answerId === selectedAnswerId && styles.selectedAnswerText]}>{item.content}</Text>
                     </TouchableOpacity>
                 ))}
             </View>
-            <TouchableOpacity style={styles.previousButton} onPress={handlePreviousQuestion}>
-                <Text style={styles.nextButtonText}>Back</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.nextButton} onPress={handleNextQuestion}>
-                <Text style={styles.nextButtonText}>Continue</Text>
-            </TouchableOpacity>
+            <View style={{ position: 'absolute', bottom: 50 }}>
+                <PinkButton onClick={() => handlePreviousQuestion()} text='Back' />
+                <PinkButton onClick={() => handleNextQuestion()} text='Next' />
+            </View>
         </View>
     );
 }
@@ -113,34 +112,6 @@ const styles = StyleSheet.create({
     answerButtonText: {
         color: '#ED8AA8',
         fontSize: 16,
-        fontWeight: 'bold',
-        textAlign: 'center',
-    },
-    nextButton: {
-        position: 'absolute',
-        width: 250,
-        height: 50,
-        bottom: 170,
-        marginTop: 50,
-        marginHorizontal: 50,
-        backgroundColor: '#ED8AA8',
-        borderRadius: 50,
-        padding: 12,
-    },
-    previousButton: {
-        position: 'absolute',
-        width: 250,
-        height: 50,
-        bottom: 100,
-        marginTop: 50,
-        marginHorizontal: 50,
-        backgroundColor: '#ED8AA8',
-        borderRadius: 50,
-        padding: 12,
-    },
-    nextButtonText: {
-        color: 'white',
-        fontSize: 20,
         fontWeight: 'bold',
         textAlign: 'center',
     },

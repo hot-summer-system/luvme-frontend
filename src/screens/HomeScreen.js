@@ -1,10 +1,20 @@
 import { View, Text, StyleSheet } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import ProductsView from '../components/ProductsView'
+import { getSuitableProducts } from '../api/products'
 
 export default function HomeScreen() {
+    const [products, setProducts] = useState([]);
+    useEffect(() => {
+        async function getProducts() {
+            const data = await getSuitableProducts();
+            setProducts(data)
+        }
+        getProducts()
+    }, [])
     return (
-        <View>
-            <Text>HomeScreen</Text>
+        <View style={styles.container}>
+            <ProductsView products={products} />
         </View>
     )
 }

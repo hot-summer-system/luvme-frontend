@@ -1,9 +1,5 @@
 import api from "./api";
-export const getListOfProducts = async () => {
-    const response = await api.get('/products');
-    return response.data;
-};
-export const getProduct = async (id) => {
-    const response = await api.get(`/products/${id}`);
+export const getSuitableProducts = async () => {
+    const response = await api.get('/api/v1/product/suitableSkinType');
     return response.data;
 };
