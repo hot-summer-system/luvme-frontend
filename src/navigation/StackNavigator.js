@@ -6,11 +6,13 @@ import QuestionScreen from '../screens/QuestionScreen';
 import ResultScreen from '../screens/ResultScreen';
 import FillInfoScreen from '../screens/FillInfoScreen';
 import BottomTabNavigator from './BottomTabNavigator'
+import LoginScreen from '../screens/LoginScreen';
 
 const Stack = createNativeStackNavigator();
 const StackNavigator = () => {
     return (
-        <Stack.Navigator initialRouteName="Question">
+        <Stack.Navigator initialRouteName="Landing">
+            <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
             <Stack.Screen name="FillInfo" component={FillInfoScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Question" component={QuestionScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Landing" component={LandingScreen} options={{ headerShown: false }} />

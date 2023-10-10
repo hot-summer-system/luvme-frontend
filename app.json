@@ -2,10 +2,6 @@
   "expo": {
     "name": "luvme-frontend",
     "slug": "luvme-frontend",
-    "plugins": [
-      "@react-native-google-signin/google-signin",
-      "@react-native-firebase/app"
-    ],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -15,19 +11,17 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.hotsummer.luvme"
     },
     "android": {
-      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.hotsummer.luvmefrontend"
+      "package": "com.hotsummer.luvme"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -36,6 +30,7 @@
       "eas": {
         "projectId": "1e95a0be-3065-42e7-8658-903f3967bddb"
       }
-    }
+    },
+    "scheme": "luvme-frontend"
   }
 }

@@ -1,13 +1,9 @@
 import { View, Text, StyleSheet, Image } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Swiper from 'react-native-swiper'
 import { useNavigation } from '@react-navigation/native'
-import { login } from '../api/login'
 import PinkButton from '../components/PinkButton'
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-import auth from '@react-native-firebase/auth'
-import { GoogleSigninButton, GoogleSignin } from '@react-native-google-signin/google-signin'
+import WhiteButton from '../components/WhiteButton'
 
 const slides = [
     {
@@ -16,39 +12,20 @@ const slides = [
         caption: 'Discover your unique skin tone and its specific characteristics to make informed skincare choices'
     },
     {
+        image: require('../images/skintype.png'),
+        title: 'Skintype',
+        caption: 'Discover your unique skin type and create a personalized skincare routine that you truly adore.'
+    },
+    {
         image: require('../images/products.png'),
         title: 'Find products',
         caption: 'Search for a wide range of high-quality skincare and beauty products that match your unique skin type and preferences.'
     },
-    {
-        image: require('../images/skincare.png'),
-        title: 'Skincare',
-        caption: 'Personalize your skincare routine with expert recommendations and tips tailored to your individual skin needs.'
-    },
 ]
 
-export default function StartedScreen() {
+export default function StartedScreen({ promptAsync }) {
     const navigation = useNavigation();
-    // GoogleSignin.configure({
-    //     webClientId: "252404852599-bfgeti42ibci6pto0rkcmjps90chu5oa.apps.googleusercontent.com",
-    // })
-    const onGoogleButtonPress = async () => {
-        // Check if your device supports Google Play
-        // await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-        // // Get the users ID token
-        // const { idToken } = await GoogleSignin.signIn();
-        // await AsyncStorage.setItem('idToken', idToken);
-        const data = await login();
-        console.log(data);
-        const userId = data.userId;
-        if (data.status === "NONFULLFILL") {
-            navigation.navigate('FillInfo', { userId });
-        } else if (data.isTest === false) {
-            navigation.navigate('Questions')
-        } else {
-            navigation.navigate('Home')
-        }
-    }
+
     return (
         <View style={styles.container}>
             <Swiper
@@ -62,20 +39,17 @@ export default function StartedScreen() {
                     <View key={index}
                         style={styles.slide}
                     >
-                        <Image source={slide.image} style={styles.image} />
+                        <View style={{ alignSelf: 'center', height: 250, marginBottom: 50 }}>
+                            <Image source={slide.image} style={styles.image} />
+                        </View>
                         <Text style={styles.title}>{slide.title}</Text>
                         <Text style={styles.caption}>{slide.caption}</Text>
                     </View>
                 ))}
             </Swiper>
-            <View style={{ height: 200 }}>
-                <Text style={styles.signUpText}>Signup now, to save your progress & analysis</Text>
-                <GoogleSigninButton
-                    style={styles.signUpButton}
-                    title="Google Sign-In"
-                    onPress={() => onGoogleButtonPress()}
-                />
-                <PinkButton onClick={() => navigation.navigate('Root', { screen: 'Home' })} text="Home" />
+            <View style={styles.buttonView}>
+                <PinkButton onClick={() => promptAsync()} text="Sign in with Google" />
+                <WhiteButton onClick={() => navigation.navigate('Root', { screen: 'Home' })} text="Login" />
             </View>
         </View>
     )
@@ -111,16 +85,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     image: {
-        marginTop: 40,
-        height: 200,
-        width: 'auto',
-        marginStart: 10,
-        marginEnd: 10,
-        // borderWidth: 1,
-        // borderStyle: 'solid',
-        // borderRadius: 4,
-        // borderColor: '#ED8AA8',
-        resizeMode: 'contain'
+        marginTop: 30,
+        height: '100%',
+        resizeMode: 'contain',
     },
     title: {
         marginTop: 40,
@@ -133,11 +100,9 @@ const styles = StyleSheet.create({
         fontSize: 16,
         textAlign: 'center',
         marginHorizontal: 5,
+        color: 'rgba(0,0,0,.5)',
     },
-    signUpText: {
-        textAlign: 'center',
-        fontSize: 20,
-    },
-    signUpButton: {
-    },
+    buttonView: {
+        marginBottom: 100,
+    }
 })

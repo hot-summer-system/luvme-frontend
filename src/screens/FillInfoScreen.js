@@ -1,11 +1,10 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
-import { TextInput, RadioButton, Button } from 'react-native-paper';
+import { TextInput, RadioButton } from 'react-native-paper';
 import PinkButton from '../components/PinkButton';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import { fillInfo } from '../api/user'
-import { login } from '../api/login'
 
 export default function FillInfoScreen() {
   const navigation = useNavigation();
@@ -13,7 +12,7 @@ export default function FillInfoScreen() {
   const [gender, setGender] = useState('male');
   const [birthDay, setBirthDay] = useState(new Date());
   const route = useRoute();
-  // const userId = route.params?.userId;
+  const userId = route.params?.userId;
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
@@ -21,8 +20,6 @@ export default function FillInfoScreen() {
   };
   const nextPage = async () => {
     try {
-      const user = await login();
-      const userId = user.userId
       const data = await fillInfo(userId, { fullName: fullName, gender: gender, birthDay: birthDay.toISOString().slice(0, 10) })
       if (data.test === false) {
         navigation.navigate('Question');

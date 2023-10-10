@@ -1,18 +1,17 @@
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
+import { Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native'
 import React from 'react'
 
 export default function PinkButton(props) {
   return (
-    <View>
-      <TouchableOpacity onPress={props.onClick} style={styles.btn}>
-        <Text style={styles.btnText}>{props.text}</Text>
-      </TouchableOpacity>
-    </View>
+    <TouchableOpacity onPress={props.onClick} style={styles.btn}>
+      <Text style={styles.btnText}>{props.text}</Text>
+    </TouchableOpacity>
   )
 }
+const windowWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   btn: {
-    width: 200,
+    width: windowWidth - 100,
     marginTop: 10,
     backgroundColor: '#ED8AA8',
     borderRadius: 20,
