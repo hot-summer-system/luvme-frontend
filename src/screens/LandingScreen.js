@@ -1,12 +1,7 @@
 import { View, Text, StyleSheet, Image } from 'react-native'
 import React from 'react'
-import { useNavigation } from '@react-navigation/native'
 
 export default function LandingScreen() {
-    const navigation = useNavigation();
-    setInterval(() => {
-        navigation.navigate('Started')
-    }, 1000)
     return (
         <View style={styles.container}>
             <View style={styles.navigation}></View>

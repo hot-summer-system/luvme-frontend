@@ -2,7 +2,7 @@ import api from './api'
 export const fillInfo = async (userId, userRequest) => {
     console.log(userId)
     console.log(userRequest)
-    const response = await api.put(`/api/v1/user/updateFill/${userId}`, userRequest);
-    console.log(response.status)
+    const response = await api.put(`/api/v1/user/updateFill/${userId}?birthDay=${userRequest.birthDay}&fullName=${encodeURIComponent(userRequest.fullName)}&gender=${userRequest.gender}`);
+    console.log(response)
     return response.data;
 }

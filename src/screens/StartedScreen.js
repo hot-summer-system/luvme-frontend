@@ -1,9 +1,6 @@
 import { View, Text, StyleSheet, Image } from 'react-native'
-import React, { useEffect, useState } from 'react'
 import Swiper from 'react-native-swiper'
-import { useNavigation } from '@react-navigation/native'
 import PinkButton from '../components/PinkButton'
-import WhiteButton from '../components/WhiteButton'
 
 const slides = [
     {
@@ -24,7 +21,6 @@ const slides = [
 ]
 
 export default function StartedScreen({ promptAsync }) {
-    const navigation = useNavigation();
 
     return (
         <View style={styles.container}>
@@ -49,7 +45,6 @@ export default function StartedScreen({ promptAsync }) {
             </Swiper>
             <View style={styles.buttonView}>
                 <PinkButton onClick={() => promptAsync()} text="Sign in with Google" />
-                <WhiteButton onClick={() => navigation.navigate('Root', { screen: 'Home' })} text="Login" />
             </View>
         </View>
     )

@@ -8,7 +8,10 @@ import { GoogleAuthProvider, onAuthStateChanged, signInWithCredential } from 'fi
 import { FIREBASE_AUTH } from './firebase';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator } from 'react-native-paper';
+import { login } from './src/api/login'
+import FillInfoScreen from './src/screens/FillInfoScreen';
+import QuestionScreen from './src/screens/QuestionScreen';
+import LandingScreen from './src/screens/LandingScreen';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -17,16 +20,15 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [request, response, promptAsync] = Google.useAuthRequest({
     iosClientId:
-      "1001644222317-cud4si99aso4rjvjcej6ih1lujv96mq5.apps.googleusercontent.com",
+      "478792066490-grou5eeq1v3si2vijsrekthoki1n6ier.apps.googleusercontent.com",
     androidClientId:
-      "1001644222317-me5ll5alj4kmp9gu3mdrh65be44sa69f.apps.googleusercontent.com"
+      "478792066490-8t3jseoocv250kh32kp953k8t6chs4q8.apps.googleusercontent.com"
   })
   const checkLocalUser = async () => {
     try {
       setLoading(true)
       const userJSON = await AsyncStorage.getItem("@user")
       const userData = userJSON ? JSON.parse(userJSON) : null;
-      console.log("local:", userData)
       setUserInfo(userData)
     } catch (error) {
       alert(error.message)
@@ -37,7 +39,6 @@ export default function App() {
 
   useEffect(() => {
     if (response?.type == "success") {
-      console.log(response.params)
       const { id_token } = response.params;
       const credential = GoogleAuthProvider.credential(id_token);
       signInWithCredential(FIREBASE_AUTH, credential)
@@ -48,9 +49,15 @@ export default function App() {
     checkLocalUser();
     const unSub = onAuthStateChanged(FIREBASE_AUTH, async (user) => {
       if (user) {
-        console.log(user.getIdToken())
-        setUserInfo(user)
-        await AsyncStorage.setItem("@user", JSON.stringify(user))
+        try {
+          AsyncStorage.setItem("idToken", await user.getIdToken())
+          const data = await login()
+          console.log(data)
+          setUserInfo(data)
+          AsyncStorage.setItem("@user", JSON.stringify(data))
+        } catch (error) {
+          console.error("Error during user data retrieval:", error);
+        }
       } else {
         console.log("User is not authenticated")
       }
@@ -59,8 +66,8 @@ export default function App() {
   }, [])
 
   if (loading) return (
-    <View>
-      <ActivityIndicator size={'large'} />
+    <View style={styles.container}>
+      <LandingScreen />
     </View>
   )
   return (
