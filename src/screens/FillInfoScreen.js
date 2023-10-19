@@ -1,26 +1,42 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { TextInput, RadioButton, Button } from 'react-native-paper';
 import PinkButton from '../components/PinkButton';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import { fillInfo } from '../api/user'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import LandingScreen from './LandingScreen';
 
 export default function FillInfoScreen() {
+  const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
   const [fullName, onChangeFullName] = useState('');
   const [gender, setGender] = useState('male');
   const [birthDay, setBirthDay] = useState(new Date());
-  
-  const userId = async () => {
-    const userJSON = await AsyncStorage.getItem("@user")
-    const userData = userJSON ? JSON.parse(userJSON) : null;
-    if(userData.status!=="NONFULLFILL"){
-      navigation.navigate("Question")
+  const [userId, setUserId] = useState(null)
+  async function getUserInfo() {
+    try {
+      setLoading(true)
+      const userJSON = await AsyncStorage.getItem("@user")
+      const userData = userJSON ? JSON.parse(userJSON) : null;
+      setUserId(userData.userId)
+      if (userData.status !== "NONFULLFILL") {
+        if (userData.test === false) {
+          navigation.navigate("Question")
+        } else {
+          navigation.navigate('Root', { screen: 'Home' })
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
     }
-    return userData.userId
   }
+  useEffect(() => {
+    getUserInfo()
+  }, [])
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
@@ -28,7 +44,11 @@ export default function FillInfoScreen() {
   };
   const nextPage = async () => {
     try {
-      const data = await fillInfo(await userId(), { fullName: fullName, gender: gender, birthDay: birthDay.toISOString().slice(0, 10) })
+      const data = await fillInfo(userId, { fullName: fullName, gender: gender, birthDay: birthDay.toISOString().slice(0, 10) })
+      const userJSON = await AsyncStorage.getItem("@user")
+      const userData = userJSON ? JSON.parse(userJSON) : null
+      userData.status = "ACTIVE";
+      AsyncStorage.setItem("@user", JSON.stringify(userData))
       if (data.test === false) {
         navigation.navigate('Question');
       } else {
@@ -38,6 +58,11 @@ export default function FillInfoScreen() {
       console.log(error)
     }
   }
+  if (loading) return (
+    <View style={styles.container}>
+      <LandingScreen />
+    </View>
+  )
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Fill Info</Text>

@@ -4,13 +4,11 @@ import StackNavigator from './src/navigation/StackNavigator';
 import StartedScreen from './src/screens/StartedScreen';
 import * as Google from 'expo-auth-session/providers/google';
 import * as WebBrowser from 'expo-web-browser';
-import { GoogleAuthProvider, onAuthStateChanged, signInWithCredential } from 'firebase/auth';
+import { GoogleAuthProvider, onAuthStateChanged, signInWithCredential, signOut } from 'firebase/auth';
 import { FIREBASE_AUTH } from './firebase';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 import { login } from './src/api/login'
-import FillInfoScreen from './src/screens/FillInfoScreen';
-import QuestionScreen from './src/screens/QuestionScreen';
 import LandingScreen from './src/screens/LandingScreen';
 
 WebBrowser.maybeCompleteAuthSession();
@@ -24,6 +22,7 @@ export default function App() {
     androidClientId:
       "478792066490-8t3jseoocv250kh32kp953k8t6chs4q8.apps.googleusercontent.com"
   })
+
   const checkLocalUser = async () => {
     try {
       setLoading(true)
@@ -31,7 +30,7 @@ export default function App() {
       const userData = userJSON ? JSON.parse(userJSON) : null;
       setUserInfo(userData)
     } catch (error) {
-      alert(error.message)
+      console.log(error.message)
     } finally {
       setLoading(false)
     }
@@ -50,15 +49,18 @@ export default function App() {
     const unSub = onAuthStateChanged(FIREBASE_AUTH, async (user) => {
       if (user) {
         try {
-          AsyncStorage.setItem("idToken", await user.getIdToken())
+          const idToken = await user.getIdToken()
+          await AsyncStorage.setItem("idToken", idToken)
           const data = await login()
-          console.log(data)
           setUserInfo(data)
-          AsyncStorage.setItem("@user", JSON.stringify(data))
+          await AsyncStorage.setItem("@user", JSON.stringify(data))
         } catch (error) {
           console.error("Error during user data retrieval:", error);
         }
       } else {
+        setUserInfo(null)
+        await AsyncStorage.removeItem("idToken")
+        await AsyncStorage.removeItem("@user")
         console.log("User is not authenticated")
       }
     })

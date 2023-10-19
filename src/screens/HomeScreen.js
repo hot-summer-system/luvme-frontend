@@ -1,20 +1,20 @@
 import { View, Text, StyleSheet } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import ProductsView from '../components/ProductsView'
-import { getSuitableProducts } from '../api/products'
+import { getCategories } from '../api/categories'
+import CategoryView from '../components/CategoryView';
 
 export default function HomeScreen() {
-    const [products, setProducts] = useState([]);
+    const [categories, setCategories] = useState([]);
+    async function getAllCategories() {
+        const data = await getCategories();
+        setCategories(data)
+    }
     useEffect(() => {
-        async function getProducts() {
-            const data = await getSuitableProducts();
-            setProducts(data)
-        }
-        getProducts()
+        getAllCategories()
     }, [])
     return (
         <View style={styles.container}>
-            <ProductsView products={products} />
+            <CategoryView categories={categories} />
         </View>
     )
 }

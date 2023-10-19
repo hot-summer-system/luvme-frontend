@@ -3,19 +3,33 @@ import React, { useState, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { getFirstQuestion, getQuestion } from '../api/questions';
 import PinkButton from '../components/PinkButton';
+import LandingScreen from './LandingScreen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function QuestionScreen() {
+    const [loading, setLoading] = useState(false);
     const navigation = useNavigation();
     const [questions, setQuestions] = useState([]);
     const [selectedAnswerId, setSelectedAnswerId] = useState(null);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-
-    useEffect(() => {
-        async function get1Question() {
+    async function get1Question() {
+        try {
+            setLoading(true);
+            const userJSON = await AsyncStorage.getItem("@user")
+            const userData = userJSON ? JSON.parse(userJSON) : null;
+            if (userData.test !== false) {
+                navigation.navigate('Root', { screen: 'Home' })
+            }
             const data = await getFirstQuestion();
             setQuestions([...questions, data]);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
         }
+    }
+    useEffect(() => {
         get1Question();
     }, []);
 
@@ -28,13 +42,16 @@ export default function QuestionScreen() {
         const selectedAnswer = questions[currentQuestionIndex].answers.find((answer) => answer.answerId === selectedAnswerId);
         const resultId = selectedAnswer.resultId
         const linkedQuestionId = selectedAnswer.linkedQuestionId;
-        console.log(selectedAnswer)
         if (linkedQuestionId) {
             const data = await getQuestion(linkedQuestionId);
             setQuestions([...questions, data]);
             setSelectedAnswerId(null);
             setCurrentQuestionIndex(questions.length);
-        } else {
+        } else if (resultId) {
+            const userJSON = await AsyncStorage.getItem("@user")
+            const userData = userJSON ? JSON.parse(userJSON) : null
+            userData.isTest = true;
+            AsyncStorage.setItem("@user", JSON.stringify(userData))
             navigation.navigate("Result", { resultId });
         }
     };
@@ -46,11 +63,14 @@ export default function QuestionScreen() {
             setSelectedAnswerId(null);
             setCurrentQuestionIndex(currentQuestionIndex - 1);
         } else {
-            // Handle end of questions (e.g., navigate to result screen)
             console.log('This is the first question');
         }
     };
-
+    if (loading) return (
+        <View style={styles.container}>
+            <LandingScreen />
+        </View>
+    )
     return (
         <View style={styles.container}>
             <Text style={styles.questionText}>{questions[currentQuestionIndex]?.content}</Text>
