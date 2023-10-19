@@ -14,15 +14,15 @@ export default function FillInfoScreen() {
   const [fullName, onChangeFullName] = useState('');
   const [gender, setGender] = useState('male');
   const [birthDay, setBirthDay] = useState(new Date());
-  const [userId, setUserId] = useState(null)
+  const [userData, setUserData] = useState(null)
   async function getUserInfo() {
     try {
       setLoading(true)
       const userJSON = await AsyncStorage.getItem("@user")
       const userData = userJSON ? JSON.parse(userJSON) : null;
-      setUserId(userData.userId)
+      setUserData(userData)
       if (userData.status !== "NONFULLFILL") {
-        if (userData.test === false) {
+        if (userData.isTest === false) {
           navigation.navigate("Question")
         } else {
           navigation.navigate('Root', { screen: 'Home' })
@@ -44,12 +44,10 @@ export default function FillInfoScreen() {
   };
   const nextPage = async () => {
     try {
-      const data = await fillInfo(userId, { fullName: fullName, gender: gender, birthDay: birthDay.toISOString().slice(0, 10) })
-      const userJSON = await AsyncStorage.getItem("@user")
-      const userData = userJSON ? JSON.parse(userJSON) : null
+      const data = await fillInfo(userData.userId, { fullName: fullName, gender: gender, birthDay: birthDay.toISOString().slice(0, 10) })
       userData.status = "ACTIVE";
       AsyncStorage.setItem("@user", JSON.stringify(userData))
-      if (data.test === false) {
+      if (userData.isTest === false) {
         navigation.navigate('Question');
       } else {
         navigation.navigate('Root', { screen: 'Home' })

@@ -25,6 +25,8 @@ export default function App() {
 
   const checkLocalUser = async () => {
     try {
+      await AsyncStorage.clear();
+      await signOut(FIREBASE_AUTH);
       setLoading(true)
       const userJSON = await AsyncStorage.getItem("@user")
       const userData = userJSON ? JSON.parse(userJSON) : null;

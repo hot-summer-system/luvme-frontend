@@ -18,7 +18,7 @@ export default function QuestionScreen() {
             setLoading(true);
             const userJSON = await AsyncStorage.getItem("@user")
             const userData = userJSON ? JSON.parse(userJSON) : null;
-            if (userData.test !== false) {
+            if (userData.isTest !== false) {
                 navigation.navigate('Root', { screen: 'Home' })
             }
             const data = await getFirstQuestion();
