@@ -1,10 +1,33 @@
-import { View, Text, FlatList, StyleSheet, Image, Dimensions } from 'react-native'
-import React from 'react'
+import React, { useState, useEffect } from 'react';
+import { View, Text, FlatList, StyleSheet, Image, Dimensions, TouchableOpacity } from 'react-native';
+import { addProductToFavorites, getFavoriteProducts, removeProductFromFavorites } from '../api/products';
 
 const windowWidth = Dimensions.get('window').width;
 const numCol = 2;
 const columnWidth = windowWidth / numCol;
-export default function ProductsView({products}) {
+
+export default function ProductsView({ products }) {
+    const [favoriteProducts, setFavoriteProducts] = useState([]);
+    async function getFavorite() {
+        const products = await getFavoriteProducts();
+        setFavoriteProducts(products)
+    }
+    useEffect(() => {
+        getFavorite();
+    }, []);
+
+    const toggleFavorite = async (product) => {
+        if (favoriteProducts.some((favoriteProduct) => favoriteProduct.productId === product.productId)) {
+            // console.log("remove", product.productId)
+            // await removeProductFromFavorites();
+            getFavorite()
+        } else {
+            console.log("add", product.productId)
+            await addProductToFavorites(product.productId);
+            getFavorite()
+        }
+    };
+
     return (
         <FlatList
             style={styles.container}
@@ -15,11 +38,29 @@ export default function ProductsView({products}) {
                 <View style={styles.column}>
                     <Image source={{ uri: 'https://image.hsv-tech.io/1387x0/bbx/face-cleanser-200ml-da-by-moi-031021_03550e415ce6426f953a84af73c0d8f2.jpg' }} style={styles.image} />
                     <Text style={styles.productTitle}>{item.productName}</Text>
+                    <TouchableOpacity onPress={() => toggleFavorite(item)}>
+                        <Image
+                            source={
+                                (() => {
+                                    let isFavorite = false;
+                                    favoriteProducts.forEach((product) => {
+                                        if (product.productId === item.productId) {
+                                            console.log
+                                            isFavorite = true;
+                                        }
+                                    });
+                                    return isFavorite ? require('../images/heart_pink_icon.png') : require('../images/heart_icon.png');
+                                })()
+                            }
+                            style={{ width: 20, height: 20 }}
+                        />
+                    </TouchableOpacity>
                 </View>
             )}
         />
-    )
+    );
 }
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -33,13 +74,13 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         width: columnWidth - 20,
         height: columnWidth - 20,
-        resizeMode: 'contain'
+        resizeMode: 'contain',
     },
-    productTitle:{
+    productTitle: {
         fontSize: 16,
         fontWeight: 'bold',
-        color:'#DC447A',
+        color: '#DC447A',
         width: columnWidth - 30,
         marginTop: 5,
-    }
-})
+    },
+});

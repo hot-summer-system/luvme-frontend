@@ -49,9 +49,9 @@ export default function App() {
     const unSub = onAuthStateChanged(FIREBASE_AUTH, async (user) => {
       if (user) {
         try {
-          const idToken = await user.getIdToken()
-          await AsyncStorage.setItem("idToken", idToken)
-          const data = await login()
+          const idToken = await user.getIdToken();
+          await AsyncStorage.setItem("idToken", idToken);
+          const data = await login();
           setUserInfo(data)
           await AsyncStorage.setItem("@user", JSON.stringify(data))
         } catch (error) {
