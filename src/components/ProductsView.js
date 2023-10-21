@@ -36,7 +36,7 @@ export default function ProductsView({ products }) {
             numColumns={numCol}
             renderItem={({ item }) => (
                 <View style={styles.column}>
-                    <Image source={{ uri: 'https://image.hsv-tech.io/1387x0/bbx/face-cleanser-200ml-da-by-moi-031021_03550e415ce6426f953a84af73c0d8f2.jpg' }} style={styles.image} />
+                    <Image source={{ uri: item.productImage }} style={styles.image} />
                     <Text style={styles.productTitle}>{item.productName}</Text>
                     <TouchableOpacity onPress={() => toggleFavorite(item)}>
                         <Image
@@ -45,7 +45,6 @@ export default function ProductsView({ products }) {
                                     let isFavorite = false;
                                     favoriteProducts.forEach((product) => {
                                         if (product.productId === item.productId) {
-                                            console.log
                                             isFavorite = true;
                                         }
                                     });

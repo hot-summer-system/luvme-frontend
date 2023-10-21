@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     maxHeight: 100,
   },
   category: {
-    width: 120,
+    width: 100,
     alignItems: 'center'
   },
   categoryImage: {

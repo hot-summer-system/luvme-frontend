@@ -25,8 +25,8 @@ export default function App() {
 
   const checkLocalUser = async () => {
     try {
-      await AsyncStorage.clear();
-      await signOut(FIREBASE_AUTH);
+      // await AsyncStorage.clear();
+      // await signOut(FIREBASE_AUTH);
       setLoading(true)
       const userJSON = await AsyncStorage.getItem("@user")
       const userData = userJSON ? JSON.parse(userJSON) : null;
@@ -55,6 +55,7 @@ export default function App() {
           await AsyncStorage.setItem("idToken", idToken);
           const data = await login();
           setUserInfo(data)
+          console.log(data)
           await AsyncStorage.setItem("@user", JSON.stringify(data))
         } catch (error) {
           console.error("Error during user data retrieval:", error);
