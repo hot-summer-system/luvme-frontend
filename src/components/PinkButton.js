@@ -1,10 +1,17 @@
 import { Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native'
 import React from 'react'
+import { useFonts, Merriweather_700Bold } from '@expo-google-fonts/merriweather';
 
 export default function PinkButton(props) {
+  const [fontsLoaded] = useFonts({
+    Merriweather_700Bold,
+  })
+  if (!fontsLoaded) {
+    return null
+  }
   return (
-    <TouchableOpacity onPress={props.onClick} style={styles.btn}>
-      <Text style={styles.btnText}>{props.text}</Text>
+    <TouchableOpacity onPress={props.onClick} style={styles.btn} disabled={props.isDisabled}>
+      <Text style={{ ...styles.btnText, fontFamily: 'Merriweather_700Bold' }}>{props.text}</Text>
     </TouchableOpacity>
   )
 }
@@ -14,15 +21,13 @@ const styles = StyleSheet.create({
     width: windowWidth - 100,
     marginTop: 10,
     backgroundColor: '#ED8AA8',
-    borderRadius: 20,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    borderRadius: 30,
+    paddingVertical: 15,
     alignSelf: 'center',
   },
   btnText: {
     color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: 18,
     textAlign: 'center',
   },
 })

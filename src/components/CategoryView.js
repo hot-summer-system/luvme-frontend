@@ -3,13 +3,16 @@ import { View, FlatList, TouchableOpacity, StyleSheet, Image } from 'react-nativ
 import { Text } from 'react-native-paper';
 import { getProductsByCategory } from '../api/products';
 import ProductsView from './ProductsView'
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function CategoryView({ categories }) {
-  const [selectedCategoryId, setSelectedCategoryId] = useState(0);
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [products, setProducts] = useState([]);
-  useEffect(() => {
-    handleCategoryPress(categories[0])
-  }, [])
+  useFocusEffect(
+    React.useCallback(() => {
+      handleCategoryPress(categories[0])
+    }, [])
+  );
 
   const handleCategoryPress = async (category) => {
     setSelectedCategoryId(category.categoryId);
@@ -40,14 +43,14 @@ export default function CategoryView({ categories }) {
               }}
             >
               <Image
-                // source={{uri:"https://cdn-icons-png.flaticon.com/512/4305/4305564.png"}}
-                source={require('../images/heart_pink_icon.png')}
+                source={{ uri: item.image }}
                 style={styles.categoryImage}
               />
             </View>
             <Text style={{
               color: selectedCategoryId === item.categoryId ? '#DC447A' : '#FFD2D5',
-              fontWeight: 'bold'
+              fontWeight: 'bold',
+              textAlign: 'center'
             }}>{item.categoryName}</Text>
           </TouchableOpacity>
         )}
@@ -64,11 +67,11 @@ const styles = StyleSheet.create({
     maxHeight: 100,
   },
   category: {
-    width: 100,
+    width: 95,
     alignItems: 'center'
   },
   categoryImage: {
-    maxWidth: 30,
-    maxHeight: 30
+    width: 30,
+    height: 30
   }
 })

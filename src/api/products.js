@@ -1,13 +1,14 @@
 import api from "./api";
 export const getProductsByCategory = async (categoryCode) => {
-    const response = await api.get('/api/v1/product/category/?categoryCode=' + categoryCode);
+    const response = await api.get('/api/v1/product/category', {
+        params: { categoryCode: categoryCode }
+    });
     return response.data;
 };
 export const addProductToFavorites = async (productId) => {
-    const data = {
+    const response = await api.post('/api/v1/favorite/add', {
         productId: productId
-    }
-    const response = await api.post('/api/v1/favorite/add', data);
+    });
     return response.data;
 };
 export const removeProductFromFavorites = async (id) => {

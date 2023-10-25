@@ -4,17 +4,17 @@ import PinkButton from '../components/PinkButton'
 
 const slides = [
     {
-        image: require('../images/skintone.png'),
+        image: require('../../assets/images/skintone.png'),
         title: 'Skintone',
         caption: 'Discover your unique skin tone and its specific characteristics to make informed skincare choices'
     },
     {
-        image: require('../images/skintype.png'),
+        image: require('../../assets/images/skintype.png'),
         title: 'Skintype',
         caption: 'Discover your unique skin type and create a personalized skincare routine that you truly adore.'
     },
     {
-        image: require('../images/products.png'),
+        image: require('../../assets/images/products.png'),
         title: 'Find products',
         caption: 'Search for a wide range of high-quality skincare and beauty products that match your unique skin type and preferences.'
     },

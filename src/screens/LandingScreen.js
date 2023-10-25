@@ -6,7 +6,7 @@ export default function LandingScreen() {
         <View style={styles.container}>
             <View style={styles.navigation}></View>
             <View style={styles.body}>
-                <Image source={require('../images/full_logo.png')} style={styles.luvmeLogo} />
+                <Image source={require('../../assets/images/full_logo.png')} style={styles.luvmeLogo} />
             </View>
             <View style={styles.footer}></View>
         </View>

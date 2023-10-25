@@ -90,7 +90,7 @@ export default function QuestionScreen() {
             </View>
             <View style={{ position: 'absolute', bottom: 50 }}>
                 <PinkButton onClick={() => handlePreviousQuestion()} text='Back' />
-                <PinkButton onClick={() => handleNextQuestion()} text='Next' />
+                <PinkButton onClick={() => handleNextQuestion()} text='Next' isDisable={selectedAnswerId ? false : true} />
             </View>
         </View>
     );

@@ -8,6 +8,8 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@expo-google-fonts/merriweather": "^0.2.3",
+    "@expo-google-fonts/quicksand": "^0.2.3",
     "@react-native-async-storage/async-storage": "1.17.11",
     "@react-native-community/datetimepicker": "6.7.3",
     "@react-native-firebase/app": "^18.5.0",
@@ -16,8 +18,14 @@
     "@react-navigation/native-stack": "^6.9.14",
     "axios": "^1.5.1",
     "expo": "~48.0.21",
+    "expo-application": "~5.1.1",
+    "expo-auth-session": "~4.0.3",
+    "expo-crypto": "~12.2.1",
     "expo-dev-client": "~2.2.1",
+    "expo-font": "~11.1.1",
+    "expo-splash-screen": "~0.18.2",
     "expo-status-bar": "~1.4.4",
+    "expo-web-browser": "~12.1.1",
     "firebase": "^10.4.0",
     "react": "18.2.0",
     "react-native": "0.71.14",
@@ -26,11 +34,7 @@
     "react-native-safe-area-context": "4.5.0",
     "react-native-screens": "~3.20.0",
     "react-native-swiper": "^1.6.0",
-    "expo-splash-screen": "~0.18.2",
-    "expo-auth-session": "~4.0.3",
-    "expo-crypto": "~12.2.1",
-    "expo-web-browser": "~12.1.1",
-    "expo-application": "~5.1.1"
+    "undefined": "firebase/auth/react-native"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

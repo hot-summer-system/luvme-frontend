@@ -1,9 +1,9 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { TextInput, RadioButton, Button } from 'react-native-paper';
 import PinkButton from '../components/PinkButton';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
+import RNDateTimePicker, { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import { fillInfo } from '../api/user'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LandingScreen from './LandingScreen';
@@ -46,7 +46,7 @@ export default function FillInfoScreen() {
     try {
       const data = await fillInfo(userData.userId, { fullName: fullName, gender: gender, birthDay: birthDay.toISOString().slice(0, 10) })
       userData.status = "ACTIVE";
-      AsyncStorage.setItem("@user", JSON.stringify(userData))
+      await AsyncStorage.setItem("@user", JSON.stringify(userData))
       if (userData.isTest === false) {
         navigation.navigate('Question');
       } else {
@@ -103,15 +103,13 @@ export default function FillInfoScreen() {
         )}>
           <Text style={{ marginTop: 10 }}> {birthDay.toLocaleDateString()} </Text>
         </TouchableOpacity>
+        {/* <RNDateTimePicker
+          value={birthDay}
+          mode='date'
+          maximumDate={new Date()}
+          onChange={onChange}
+        /> */}
       </View>
-      {/* <DateTimePicker
-        value={birthDay}
-        mode='date'
-        maximumDate={new Date()}
-        onChange={(evt, selectedDate) => {
-          setBirthDay(selectedDate);
-        }}
-      /> */}
       <View style={{ alignSelf: 'center', position: 'absolute', bottom: 50 }}>
         <PinkButton onClick={nextPage} text="Next" />
       </View>

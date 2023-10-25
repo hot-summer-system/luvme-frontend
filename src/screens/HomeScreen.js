@@ -2,16 +2,25 @@ import { View, Text, StyleSheet } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { getCategories } from '../api/categories'
 import CategoryView from '../components/CategoryView';
+import LandingScreen from './LandingScreen';
 
 export default function HomeScreen() {
+    const [isLoading, setIsLoading] = useState(false)
     const [categories, setCategories] = useState([]);
     async function getAllCategories() {
         const data = await getCategories();
         setCategories(data)
+        setIsLoading(false)
     }
     useEffect(() => {
+        setIsLoading(true)
         getAllCategories()
     }, [])
+    if (isLoading) {
+        return (
+            <LandingScreen />
+        )
+    }
     return (
         <View style={styles.container}>
             <CategoryView categories={categories} />

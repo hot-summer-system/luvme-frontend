@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, Image, Dimensions, TouchableOpacity } from 'react-native';
 import { addProductToFavorites, getFavoriteProducts, removeProductFromFavorites } from '../api/products';
+import { useFocusEffect } from '@react-navigation/native';
 
 const windowWidth = Dimensions.get('window').width;
 const numCol = 2;
@@ -8,23 +9,26 @@ const columnWidth = windowWidth / numCol;
 
 export default function ProductsView({ products }) {
     const [favoriteProducts, setFavoriteProducts] = useState([]);
-    async function getFavorite() {
+    async function getFavorites() {
         const products = await getFavoriteProducts();
         setFavoriteProducts(products)
     }
-    useEffect(() => {
-        getFavorite();
-    }, []);
+    useFocusEffect(
+        React.useCallback(() => {
+            getFavorites()
+        }, [])
+    );
 
     const toggleFavorite = async (product) => {
-        if (favoriteProducts.some((favoriteProduct) => favoriteProduct.productId === product.productId)) {
-            // console.log("remove", product.productId)
-            // await removeProductFromFavorites();
-            getFavorite()
+        const foundFavoriteProduct = favoriteProducts.find((favoriteProduct) => favoriteProduct.productResponse.productId === product.productId);
+        if (foundFavoriteProduct) {
+            console.log("remove", product.productId)
+            await removeProductFromFavorites(foundFavoriteProduct.favoriteId);
+            getFavorites()
         } else {
             console.log("add", product.productId)
             await addProductToFavorites(product.productId);
-            getFavorite()
+            getFavorites()
         }
     };
 
@@ -43,12 +47,12 @@ export default function ProductsView({ products }) {
                             source={
                                 (() => {
                                     let isFavorite = false;
-                                    favoriteProducts.forEach((product) => {
-                                        if (product.productId === item.productId) {
+                                    favoriteProducts.forEach((favoriteProduct) => {
+                                        if (favoriteProduct.productResponse.productId === item.productId) {
                                             isFavorite = true;
                                         }
                                     });
-                                    return isFavorite ? require('../images/heart_pink_icon.png') : require('../images/heart_icon.png');
+                                    return isFavorite ? require('../../assets/images/heart_pink_icon.png') : require('../../assets/images/heart_icon.png');
                                 })()
                             }
                             style={{ width: 20, height: 20 }}
@@ -63,6 +67,7 @@ export default function ProductsView({ products }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: 'white'
     },
     column: {
         width: columnWidth,

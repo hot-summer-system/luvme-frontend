@@ -13,28 +13,28 @@ const BottomTabNavigator = () => {
         <Tab.Navigator>
             <Tab.Screen name="Home" component={HomeScreen} options={{
                 tabBarIcon: ({ focused }) => {
-                    let icon = focused == true ? require('../images/home_pink_icon.png') : require('../images/home_icon.png');
+                    let icon = focused == true ? require('../../assets/images/home_pink_icon.png') : require('../../assets/images/home_icon.png');
                     return <Image source={icon} style={styles.tabIcon} />
                 },
                 tabBarActiveTintColor: '#DC447A',
             }} />
             <Tab.Screen name="Love" component={LoveScreen} options={{
                 tabBarIcon: ({ focused }) => {
-                    let icon = focused == true ? require('../images/heart_pink_icon.png') : require('../images/heart_icon.png');
+                    let icon = focused == true ? require('../../assets/images/heart_pink_icon.png') : require('../../assets/images/heart_icon.png');
                     return <Image source={icon} style={styles.tabIcon} />
                 },
                 tabBarActiveTintColor: '#DC447A',
             }} />
             <Tab.Screen name="Routine" component={RoutineScreen} options={{
                 tabBarIcon: ({ focused }) => {
-                    let icon = focused == true ? require('../images/routine_pink_icon.png') : require('../images/routine_icon.png');
+                    let icon = focused == true ? require('../../assets/images/routine_pink_icon.png') : require('../../assets/images/routine_icon.png');
                     return <Image source={icon} style={styles.tabIcon} />
                 },
                 tabBarActiveTintColor: '#DC447A',
             }} />
             <Tab.Screen name="Profile" component={ProfileScreen} options={{
                 tabBarIcon: ({ focused }) => {
-                    let icon = focused == true ? require('../images/profile_pink_icon.png') : require('../images/profile_icon.png');
+                    let icon = focused == true ? require('../../assets/images/profile_pink_icon.png') : require('../../assets/images/profile_icon.png');
                     return <Image source={icon} style={styles.tabIcon} />
                 },
                 tabBarActiveTintColor: '#DC447A',

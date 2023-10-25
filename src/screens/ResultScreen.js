@@ -21,7 +21,7 @@ export default function ResultScreen() {
             {result && (
                 <View style={styles.container}>
                     <Image
-                        source={require('../images/full_logo.png')}
+                        source={{uri: result.image}}
                         style={styles.image}
                     />
                     <Text style={styles.resultText}>{result.content}</Text>
