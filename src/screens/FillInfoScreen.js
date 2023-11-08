@@ -1,14 +1,18 @@
 import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { TextInput, RadioButton, Button } from 'react-native-paper';
+import { TextInput, RadioButton, ActivityIndicator } from 'react-native-paper';
 import PinkButton from '../components/PinkButton';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import RNDateTimePicker, { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import { fillInfo } from '../api/user'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import LandingScreen from './LandingScreen';
+import { useFonts, Merriweather_700Bold, Merriweather_400Regular } from '@expo-google-fonts/merriweather';
 
 export default function FillInfoScreen() {
+  const [fontsLoaded] = useFonts({
+    Merriweather_700Bold,
+    Merriweather_400Regular,
+  })
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
   const [fullName, onChangeFullName] = useState('');
@@ -17,7 +21,7 @@ export default function FillInfoScreen() {
   const [userData, setUserData] = useState(null)
   async function getUserInfo() {
     try {
-      setLoading(true)
+      setLoading(true);
       const userJSON = await AsyncStorage.getItem("@user")
       const userData = userJSON ? JSON.parse(userJSON) : null;
       setUserData(userData)
@@ -44,7 +48,7 @@ export default function FillInfoScreen() {
   };
   const nextPage = async () => {
     try {
-      const data = await fillInfo(userData.userId, { fullName: fullName, gender: gender, birthDay: birthDay.toISOString().slice(0, 10) })
+      await fillInfo(userData.userId, { fullName: fullName, gender: gender, birthDay: birthDay.toISOString().slice(0, 10) })
       userData.status = "ACTIVE";
       await AsyncStorage.setItem("@user", JSON.stringify(userData))
       if (userData.isTest === false) {
@@ -56,9 +60,12 @@ export default function FillInfoScreen() {
       console.log(error)
     }
   }
+  if (!fontsLoaded) {
+    return null
+  }
   if (loading) return (
     <View style={styles.container}>
-      <LandingScreen />
+      <ActivityIndicator animating={true} size='large' color='#DC447A' />
     </View>
   )
   return (
@@ -75,7 +82,7 @@ export default function FillInfoScreen() {
       <Text style={styles.label}>Gender:</Text>
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
         <View>
-          <Text>Male</Text>
+          <Text style={{ fontFamily: 'Quicksand_400Regular' }}>Male</Text>
           <RadioButton
             value="male"
             status={gender === 'male' ? 'checked' : 'unchecked'}
@@ -83,7 +90,7 @@ export default function FillInfoScreen() {
           />
         </View>
         <View>
-          <Text>Female</Text>
+          <Text style={{ fontFamily: 'Quicksand_400Regular' }}>Female</Text>
           <RadioButton
             value="female"
             status={gender === 'female' ? 'checked' : 'unchecked'}
@@ -98,10 +105,10 @@ export default function FillInfoScreen() {
             value: birthDay,
             onChange,
             mode: 'date',
-            maximumDate: new Date(),
+            maximumDate: new Date()
           })
         )}>
-          <Text style={{ marginTop: 10 }}> {birthDay.toLocaleDateString()} </Text>
+          <Text style={{ marginTop: 10, fontFamily: 'Merriweather_400Regular' }}> {birthDay.toLocaleDateString()} </Text>
         </TouchableOpacity>
         {/* <RNDateTimePicker
           value={birthDay}
@@ -127,18 +134,20 @@ const styles = StyleSheet.create({
     flex: 0.2,
     textAlign: 'center',
     fontSize: 32,
-    fontWeight: 'bold',
     paddingTop: 100,
+    fontFamily: 'Merriweather_700Bold'
   },
   inputBox: {
     marginTop: 10,
     height: 40,
     fontSize: 16,
     backgroundColor: 'white',
+    fontFamily: 'Merriweather_400Regular'
   },
   label: {
     fontSize: 16,
-    fontWeight: 'bold',
     marginTop: 10,
+    color: '#DC447A',
+    fontFamily: 'Merriweather_700Bold'
   }
 })

@@ -1,17 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, FlatList, StyleSheet, Image, Dimensions, TouchableOpacity } from 'react-native';
 import { addProductToFavorites, getFavoriteProducts, removeProductFromFavorites } from '../api/products';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useFonts, Quicksand_700Bold } from '@expo-google-fonts/quicksand';
+import { ActivityIndicator } from 'react-native-paper';
 
 const windowWidth = Dimensions.get('window').width;
 const numCol = 2;
 const columnWidth = windowWidth / numCol;
 
 export default function ProductsView({ products }) {
+    const [loading, setLoading] = useState(false)
+    const [fontsLoaded] = useFonts({
+        Quicksand_700Bold,
+    })
+    const navigation = useNavigation();
     const [favoriteProducts, setFavoriteProducts] = useState([]);
     async function getFavorites() {
-        const products = await getFavoriteProducts();
-        setFavoriteProducts(products)
+        try {
+            setLoading(true)
+            const products = await getFavoriteProducts();
+            setFavoriteProducts(products)
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setLoading(false)
+        }
     }
     useFocusEffect(
         React.useCallback(() => {
@@ -31,7 +45,16 @@ export default function ProductsView({ products }) {
             getFavorites()
         }
     };
-
+    if (!fontsLoaded) {
+        return null
+    }
+    if (loading) {
+        return (
+            <View style={styles.container}>
+                <ActivityIndicator animating={true} size='large' color='#DC447A' />
+            </View>
+        )
+    }
     return (
         <FlatList
             style={styles.container}
@@ -40,24 +63,30 @@ export default function ProductsView({ products }) {
             numColumns={numCol}
             renderItem={({ item }) => (
                 <View style={styles.column}>
-                    <Image source={{ uri: item.productImage }} style={styles.image} />
-                    <Text style={styles.productTitle}>{item.productName}</Text>
-                    <TouchableOpacity onPress={() => toggleFavorite(item)}>
-                        <Image
-                            source={
-                                (() => {
-                                    let isFavorite = false;
-                                    favoriteProducts.forEach((favoriteProduct) => {
-                                        if (favoriteProduct.productResponse.productId === item.productId) {
-                                            isFavorite = true;
-                                        }
-                                    });
-                                    return isFavorite ? require('../../assets/images/heart_pink_icon.png') : require('../../assets/images/heart_icon.png');
-                                })()
-                            }
-                            style={{ width: 20, height: 20 }}
-                        />
+                    <TouchableOpacity onPress={() => {
+                        navigation.navigate('Detail', { product: item })
+                    }}>
+                        <Image source={{ uri: item.productImage }} style={styles.image} />
                     </TouchableOpacity>
+                    <View style={styles.actionView}>
+                        <Text style={styles.productTitle}>{item.productName}</Text>
+                        <TouchableOpacity onPress={() => toggleFavorite(item)} style={{ position: 'absolute', top: 10, right: 5 }}>
+                            <Image
+                                source={
+                                    (() => {
+                                        let isFavorite = false;
+                                        favoriteProducts.forEach((favoriteProduct) => {
+                                            if (favoriteProduct.productResponse.productId === item.productId) {
+                                                isFavorite = true;
+                                            }
+                                        });
+                                        return isFavorite ? require('../../assets/images/heart_pink_icon.png') : require('../../assets/images/heart_icon.png');
+                                    })()
+                                }
+                                style={{ width: 15, height: 15 }}
+                            />
+                        </TouchableOpacity>
+                    </View>
                 </View>
             )}
         />
@@ -82,9 +111,14 @@ const styles = StyleSheet.create({
     },
     productTitle: {
         fontSize: 16,
-        fontWeight: 'bold',
         color: '#DC447A',
-        width: columnWidth - 30,
         marginTop: 5,
+        marginLeft: 5,
+        marginRight: 20,
+        fontFamily: 'Quicksand_700Bold',
     },
+    actionView: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    }
 });

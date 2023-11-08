@@ -1,7 +1,14 @@
 import { Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native'
 import React from 'react'
+import { useFonts, Merriweather_700Bold } from '@expo-google-fonts/merriweather';
 
 export default function WhiteButton(props) {
+    const [fontsLoaded] = useFonts({
+        Merriweather_700Bold,
+    })
+    if (!fontsLoaded) {
+        return null
+    }
     return (
         <TouchableOpacity onPress={props.onClick} style={styles.btn} disabled={props.isDisabled}>
             <Text style={styles.btnText}>{props.text}</Text>
@@ -25,5 +32,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         textAlign: 'center',
+        fontFamily: 'Merriweather_700Bold'
     },
 })

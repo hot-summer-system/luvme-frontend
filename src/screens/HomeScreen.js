@@ -2,23 +2,30 @@ import { View, Text, StyleSheet } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { getCategories } from '../api/categories'
 import CategoryView from '../components/CategoryView';
-import LandingScreen from './LandingScreen';
+import { ActivityIndicator } from 'react-native-paper';
 
 export default function HomeScreen() {
-    const [isLoading, setIsLoading] = useState(false)
+    const [loading, setLoading] = useState(false)
     const [categories, setCategories] = useState([]);
     async function getAllCategories() {
-        const data = await getCategories();
-        setCategories(data)
-        setIsLoading(false)
+        try {
+            setLoading(true)
+            const data = await getCategories();
+            setCategories(data)
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setLoading(false)
+        }
     }
     useEffect(() => {
-        setIsLoading(true)
         getAllCategories()
     }, [])
-    if (isLoading) {
+    if (loading) {
         return (
-            <LandingScreen />
+            <View style={styles.container}>
+                <ActivityIndicator animating={true} size='large' color='#DC447A' />
+            </View>
         )
     }
     return (

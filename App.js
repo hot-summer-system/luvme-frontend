@@ -15,7 +15,7 @@ WebBrowser.maybeCompleteAuthSession();
 
 export default function App() {
   const [userInfo, setUserInfo] = useState();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [request, response, promptAsync] = Google.useAuthRequest({
     iosClientId:
       "478792066490-grou5eeq1v3si2vijsrekthoki1n6ier.apps.googleusercontent.com",
@@ -27,7 +27,6 @@ export default function App() {
     try {
       // await AsyncStorage.clear();
       // await signOut(FIREBASE_AUTH);
-      setLoading(true)
       const userJSON = await AsyncStorage.getItem("@user")
       const userData = userJSON ? JSON.parse(userJSON) : null;
       setUserInfo(userData)
@@ -51,12 +50,12 @@ export default function App() {
     const unSub = onAuthStateChanged(FIREBASE_AUTH, async (user) => {
       if (user) {
         try {
-          const idToken = await user.getIdToken();
+          const idToken = await user.getIdToken()
           await AsyncStorage.setItem("idToken", idToken);
+          console.log("id",idToken)
           const data = await login();
-          setUserInfo(data)
-          console.log(data)
           await AsyncStorage.setItem("@user", JSON.stringify(data))
+          setUserInfo(data)
         } catch (error) {
           console.error("Error during user data retrieval:", error);
         }

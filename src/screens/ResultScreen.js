@@ -3,25 +3,49 @@ import React, { useEffect, useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { getResultById } from '../api/questions';
 import PinkButton from '../components/PinkButton';
+import { useFonts, Quicksand_700Bold, Quicksand_400Regular } from '@expo-google-fonts/quicksand';
+import { ActivityIndicator } from 'react-native-paper';
 
 export default function ResultScreen() {
+    const [fontsLoaded] = useFonts({
+        Quicksand_700Bold,
+        Quicksand_400Regular,
+    })
     const navigation = useNavigation();
     const [result, setResult] = useState(null)
+    const [loading, setLoading] = useState(false)
     const route = useRoute();
     const resultId = route.params?.resultId;
-    useEffect(() => {
-        async function getResult() {
+    async function getResult() {
+        try {
+            setLoading(true);
             const data = await getResultById(resultId);
             setResult(data)
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
         }
+    }
+    useEffect(() => {
         getResult()
     }, [])
+    if (!fontsLoaded) {
+        return null
+    }
+    if (loading) {
+        return (
+            <View style={styles.container}>
+                <ActivityIndicator animating={true} size='large' color='#DC447A' />
+            </View>
+        )
+    }
     return (
         <>
             {result && (
                 <View style={styles.container}>
                     <Image
-                        source={{uri: result.image}}
+                        source={{ uri: result.image }}
                         style={styles.image}
                     />
                     <Text style={styles.resultText}>{result.content}</Text>
@@ -31,7 +55,7 @@ export default function ResultScreen() {
                         <Text style={styles.infoText}>{result.feature2}</Text>
                     </View> */}
                     <View style={{ position: 'absolute', bottom: 50 }}>
-                        <PinkButton text='Skincare Routines' />
+                        <PinkButton onClick={() => navigation.navigate('Root', { screen: 'Routine' })} text='Routine' />
                         <PinkButton onClick={() => navigation.navigate('Root', { screen: 'Home' })} text='Recommend' />
                     </View>
                 </View>
@@ -56,6 +80,7 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 20,
+        fontFamily:'Quicksand_700Bold'
     },
     infoContainer: {
         width: '80%',
@@ -69,5 +94,6 @@ const styles = StyleSheet.create({
     infoText: {
         fontSize: 16,
         marginBottom: 10,
+        fontFamily:'Quicksand_400Regular'
     },
 });

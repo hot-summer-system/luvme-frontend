@@ -11,7 +11,7 @@ export default function PinkButton(props) {
   }
   return (
     <TouchableOpacity onPress={props.onClick} style={styles.btn} disabled={props.isDisabled}>
-      <Text style={{ ...styles.btnText, fontFamily: 'Merriweather_700Bold' }}>{props.text}</Text>
+      <Text style={styles.btnText}>{props.text}</Text>
     </TouchableOpacity>
   )
 }
@@ -29,5 +29,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 18,
     textAlign: 'center',
+    fontFamily: 'Merriweather_700Bold'
   },
 })

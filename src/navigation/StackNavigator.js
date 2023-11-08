@@ -4,6 +4,8 @@ import QuestionScreen from '../screens/QuestionScreen';
 import ResultScreen from '../screens/ResultScreen';
 import FillInfoScreen from '../screens/FillInfoScreen';
 import BottomTabNavigator from './BottomTabNavigator'
+import ProductDetailScreen from '../screens/ProductDetailScreen';
+import SourceScreen from '../screens/SourceScreen';
 
 const Stack = createNativeStackNavigator();
 const StackNavigator = () => {
@@ -17,6 +19,8 @@ const StackNavigator = () => {
                 component={BottomTabNavigator}
                 options={{ headerShown: false }}
             />
+            <Stack.Screen name="Detail" component={ProductDetailScreen} />
+            <Stack.Screen name="Source" component={SourceScreen} />
         </Stack.Navigator>
     )
 }

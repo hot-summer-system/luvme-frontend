@@ -3,11 +3,16 @@ import React, { useState, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { getFirstQuestion, getQuestion } from '../api/questions';
 import PinkButton from '../components/PinkButton';
-import LandingScreen from './LandingScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFonts, Quicksand_700Bold, Quicksand_400Regular } from '@expo-google-fonts/quicksand';
+import { ActivityIndicator } from 'react-native-paper';
 
 
 export default function QuestionScreen() {
+    const [fontsLoaded] = useFonts({
+        Quicksand_700Bold,
+        Quicksand_400Regular,
+    })
     const [loading, setLoading] = useState(false);
     const navigation = useNavigation();
     const [questions, setQuestions] = useState([]);
@@ -66,9 +71,12 @@ export default function QuestionScreen() {
             console.log('This is the first question');
         }
     };
+    if (!fontsLoaded) {
+        return null
+    }
     if (loading) return (
         <View style={styles.container}>
-            <LandingScreen />
+            <ActivityIndicator animating={true} size='large' color='#DC447A' />
         </View>
     )
     return (
@@ -106,6 +114,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 20,
+        fontFamily: 'Quicksand_700Bold'
     },
     answerContainer: {
         flexDirection: 'row',

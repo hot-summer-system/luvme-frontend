@@ -1,13 +1,19 @@
 import { View, Text, StyleSheet, Dimensions, FlatList, Image, TouchableOpacity } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { getFavoriteProducts, removeProductFromFavorites } from '../api/products';
 import { useFocusEffect } from '@react-navigation/native';
+import { useFonts, Quicksand_700Bold } from '@expo-google-fonts/quicksand';
+import { ActivityIndicator } from 'react-native-paper';
 
 const windowWidth = Dimensions.get('window').width;
 const numCol = 2;
 const columnWidth = windowWidth / numCol;
 
 export default function LoveScreen() {
+  const [loading, setLoading] = useState(false)
+  const [fontsLoaded] = useFonts({
+    Quicksand_700Bold,
+  })
   const [favorites, setFavorites] = useState([]);
   useFocusEffect(
     React.useCallback(() => {
@@ -16,14 +22,30 @@ export default function LoveScreen() {
   );
 
   const getFavorites = async () => {
-    const favorites = await getFavoriteProducts();
-    setFavorites(favorites);
+    try {
+      setLoading(true)
+      const favorites = await getFavoriteProducts();
+      setFavorites(favorites);
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
+    }
   };
   const deleteFavorite = async (favorite) => {
     await removeProductFromFavorites(favorite.favoriteId);
     getFavorites()
   };
-
+  if (!fontsLoaded) {
+    return null
+  }
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator animating={true} size='large' color='#DC447A' />
+      </View>
+    )
+  }
   return (
     <FlatList
       style={styles.container}
@@ -33,13 +55,15 @@ export default function LoveScreen() {
       renderItem={({ item }) => (
         <View style={styles.column}>
           <Image source={{ uri: item.productResponse.productImage }} style={styles.image} />
-          <Text style={styles.productTitle}>{item.productResponse.productName}</Text>
-          <TouchableOpacity onPress={() => deleteFavorite(item)}>
-            <Image
-              source={require('../../assets/images/heart_pink_icon.png')}
-              style={{ width: 20, height: 20 }}
-            />
-          </TouchableOpacity>
+          <View style={styles.actionView}>
+            <Text style={styles.productTitle}>{item.productResponse.productName}</Text>
+            <TouchableOpacity onPress={() => deleteFavorite(item)} style={{ position: 'absolute', top: 10, right: 5 }}>
+              <Image
+                source={require('../../assets/images/heart_pink_icon.png')}
+                style={{ width: 15, height: 15 }}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
       )}
     />
@@ -63,9 +87,14 @@ const styles = StyleSheet.create({
   },
   productTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
     color: '#DC447A',
-    width: columnWidth - 30,
     marginTop: 5,
+    marginLeft: 5,
+    marginRight: 20,
+    fontFamily: 'Quicksand_700Bold',
   },
+  actionView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  }
 })

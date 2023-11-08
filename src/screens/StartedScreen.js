@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, Image } from 'react-native'
 import Swiper from 'react-native-swiper'
 import PinkButton from '../components/PinkButton'
+import { useFonts, Quicksand_700Bold, Quicksand_400Regular } from '@expo-google-fonts/quicksand';
 
 const slides = [
     {
@@ -21,7 +22,13 @@ const slides = [
 ]
 
 export default function StartedScreen({ promptAsync }) {
-
+    const [fontsLoaded] = useFonts({
+        Quicksand_700Bold,
+        Quicksand_400Regular,
+    })
+    if (!fontsLoaded) {
+        return null
+    }
     return (
         <View style={styles.container}>
             <Swiper
@@ -87,8 +94,8 @@ const styles = StyleSheet.create({
     title: {
         marginTop: 40,
         fontSize: 24,
-        fontWeight: 'bold',
         textAlign: 'center',
+        fontFamily: "Quicksand_700Bold"
     },
     caption: {
         marginTop: 10,
@@ -96,6 +103,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginHorizontal: 5,
         color: 'rgba(0,0,0,.5)',
+        fontFamily: "Quicksand_400Regular"
     },
     buttonView: {
         marginBottom: 100,

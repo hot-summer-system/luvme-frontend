@@ -1,11 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View, FlatList, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import { Text } from 'react-native-paper';
+import { ActivityIndicator, Text } from 'react-native-paper';
 import { getProductsByCategory } from '../api/products';
 import ProductsView from './ProductsView'
 import { useFocusEffect } from '@react-navigation/native';
+import { useFonts, Quicksand_700Bold, Quicksand_400Regular } from '@expo-google-fonts/quicksand';
 
 export default function CategoryView({ categories }) {
+  const [fontsLoaded] = useFonts({
+    Quicksand_700Bold,
+    Quicksand_400Regular,
+  })
+  const [loading, setLoading] = useState(false)
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [products, setProducts] = useState([]);
   useFocusEffect(
@@ -15,11 +21,27 @@ export default function CategoryView({ categories }) {
   );
 
   const handleCategoryPress = async (category) => {
-    setSelectedCategoryId(category.categoryId);
-    const products = await getProductsByCategory(category.categoryCode);
-    setProducts(products);
+    try {
+      setLoading(true)
+      setSelectedCategoryId(category.categoryId);
+      const products = await getProductsByCategory(category.categoryCode);
+      setProducts(products);
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
+    }
   };
-
+  if (!fontsLoaded) {
+    return null
+  }
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator animating={true} size='large' color='#DC447A' />
+      </View>
+    )
+  }
   return (
     <View style={styles.container}>
       <FlatList
@@ -48,8 +70,8 @@ export default function CategoryView({ categories }) {
               />
             </View>
             <Text style={{
+              fontFamily: selectedCategoryId === item.categoryId ? 'Quicksand_700Bold' : 'Quicksand_400Regular',
               color: selectedCategoryId === item.categoryId ? '#DC447A' : '#FFD2D5',
-              fontWeight: 'bold',
               textAlign: 'center'
             }}>{item.categoryName}</Text>
           </TouchableOpacity>
@@ -67,7 +89,7 @@ const styles = StyleSheet.create({
     maxHeight: 100,
   },
   category: {
-    width: 95,
+    width: 80,
     alignItems: 'center'
   },
   categoryImage: {
