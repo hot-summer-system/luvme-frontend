@@ -8,6 +8,6 @@ export const getQuestion = async (questionId) => {
     return response.data;
 };
 export const getResultById = async (resultId) => {
-    const response = await api.get(`/api/v1/result/results/${resultId}`);
+    const response = await api.get(`/api/v1/result/${resultId}`);
     return response.data;
 };

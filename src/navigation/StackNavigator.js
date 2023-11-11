@@ -6,6 +6,9 @@ import FillInfoScreen from '../screens/FillInfoScreen';
 import BottomTabNavigator from './BottomTabNavigator'
 import ProductDetailScreen from '../screens/ProductDetailScreen';
 import SourceScreen from '../screens/SourceScreen';
+import AddProductScreen from '../screens/AddProductScreen';
+import ModifyRoutineScreen from '../screens/ModifyRoutineScreen';
+import StartRoutineScreen from '../screens/StartRoutineScreen';
 
 const Stack = createNativeStackNavigator();
 const StackNavigator = () => {
@@ -21,6 +24,9 @@ const StackNavigator = () => {
             />
             <Stack.Screen name="Detail" component={ProductDetailScreen} />
             <Stack.Screen name="Source" component={SourceScreen} />
+            <Stack.Screen name="Modify Routine" component={ModifyRoutineScreen} />
+            <Stack.Screen name="Add Product" component={AddProductScreen} />
+            <Stack.Screen name="Start Routine" component={StartRoutineScreen} />
         </Stack.Navigator>
     )
 }

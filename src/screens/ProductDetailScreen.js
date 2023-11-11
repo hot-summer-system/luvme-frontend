@@ -1,10 +1,10 @@
-import { View, Text, Image, StyleSheet, Dimensions } from 'react-native'
+import { View, Text, Image, StyleSheet, Dimensions, Linking, ScrollView } from 'react-native'
 import React from 'react'
 import PinkButton from '../components/PinkButton'
 import { useRoute } from '@react-navigation/native'
-const screenWidth = Dimensions.get('window').width;
 import { useFonts, Quicksand_700Bold, Quicksand_400Regular } from '@expo-google-fonts/quicksand';
-import { ScrollView } from 'react-native';
+
+const screenWidth = Dimensions.get('window').width;
 
 export default function ProductDetailScreen() {
     const [fontsLoaded] = useFonts({
@@ -13,6 +13,9 @@ export default function ProductDetailScreen() {
     })
     const route = useRoute();
     const { product } = route.params
+    const openExternalLink = (url) => {
+        Linking.openURL(url).catch((err) => console.error('Can\'t open this link: ', err));
+    };
     if (!fontsLoaded) {
         return null
     }
@@ -20,7 +23,9 @@ export default function ProductDetailScreen() {
         <ScrollView style={styles.container}>
             <Image source={{ uri: product.productImage }} style={styles.image} />
             <Text style={styles.productTitle}>{product.productName}</Text>
-            <PinkButton text="Shopping" onClick={() => { }}/>
+            <View style={{ marginTop: 15, marginBottom: 10 }}>
+                <PinkButton text="Shopping" onClick={() => openExternalLink(product.productAffiliate)} />
+            </View>
             <Text style={styles.productTitle}>Characteristics</Text>
             {product.productCharacteristicsResponses.map((characteristic) => (
                 <View key={characteristic.productCharacteristicId}>

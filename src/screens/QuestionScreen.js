@@ -1,17 +1,19 @@
-import { View, Text, TouchableOpacity, FlatList, StyleSheet } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { getFirstQuestion, getQuestion } from '../api/questions';
 import PinkButton from '../components/PinkButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useFonts, Quicksand_700Bold, Quicksand_400Regular } from '@expo-google-fonts/quicksand';
+import { useFonts, Quicksand_700Bold } from '@expo-google-fonts/quicksand';
+import { Merriweather_700Bold, Merriweather_400Regular } from '@expo-google-fonts/merriweather';
 import { ActivityIndicator } from 'react-native-paper';
 
 
 export default function QuestionScreen() {
     const [fontsLoaded] = useFonts({
         Quicksand_700Bold,
-        Quicksand_400Regular,
+        Merriweather_700Bold,
+        Merriweather_400Regular
     })
     const [loading, setLoading] = useState(false);
     const navigation = useNavigation();
@@ -44,20 +46,25 @@ export default function QuestionScreen() {
     };
 
     const handleNextQuestion = async () => {
-        const selectedAnswer = questions[currentQuestionIndex].answers.find((answer) => answer.answerId === selectedAnswerId);
-        const resultId = selectedAnswer.resultId
-        const linkedQuestionId = selectedAnswer.linkedQuestionId;
-        if (linkedQuestionId) {
-            const data = await getQuestion(linkedQuestionId);
-            setQuestions([...questions, data]);
-            setSelectedAnswerId(null);
-            setCurrentQuestionIndex(questions.length);
-        } else if (resultId) {
-            const userJSON = await AsyncStorage.getItem("@user")
-            const userData = userJSON ? JSON.parse(userJSON) : null
-            userData.isTest = true;
-            AsyncStorage.setItem("@user", JSON.stringify(userData))
-            navigation.navigate("Result", { resultId });
+        if (selectedAnswerId !== null) {
+            const selectedAnswer = questions[currentQuestionIndex].answers.find((answer) => answer.answerId === selectedAnswerId);
+            const resultId = selectedAnswer.resultId
+            const linkedQuestionId = selectedAnswer.linkedQuestionId;
+            if (linkedQuestionId) {
+                const data = await getQuestion(linkedQuestionId);
+                setQuestions([...questions, data]);
+                setSelectedAnswerId(null);
+                setCurrentQuestionIndex(questions.length);
+            } else if (resultId) {
+                setSelectedAnswerId(null)
+                const userJSON = await AsyncStorage.getItem("@user")
+                const userData = userJSON ? JSON.parse(userJSON) : null
+                userData.isTest = true;
+                AsyncStorage.setItem("@user", JSON.stringify(userData))
+                navigation.navigate("Result", { resultId });
+            }
+        } else {
+            alert("Please select an answer")
         }
     };
     const handlePreviousQuestion = () => {
@@ -112,9 +119,9 @@ const styles = StyleSheet.create({
     },
     questionText: {
         fontSize: 20,
-        fontWeight: 'bold',
         marginBottom: 20,
-        fontFamily: 'Quicksand_700Bold'
+        fontFamily: 'Quicksand_700Bold',
+        color: '#DC447A',
     },
     answerContainer: {
         flexDirection: 'row',
@@ -137,12 +144,13 @@ const styles = StyleSheet.create({
     },
     selectedAnswerText: {
         color: 'white',
+        fontFamily: 'Merriweather_700Bold'
     },
     answerButtonText: {
         color: '#ED8AA8',
         fontSize: 16,
-        fontWeight: 'bold',
         textAlign: 'center',
+        fontFamily: 'Merriweather_400Regular',
     },
 });
 

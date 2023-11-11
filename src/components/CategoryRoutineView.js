@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { View, FlatList, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { ActivityIndicator, Text } from 'react-native-paper';
 import { getProductsByCategory } from '../api/products';
-import ProductsView from './ProductsView'
+import ProductsRoutineView from './ProductsRoutineView'
 import { useFonts, Quicksand_700Bold, Quicksand_400Regular } from '@expo-google-fonts/quicksand';
 
-export default function CategoryView({ categories }) {
+export default function CategoryRoutineView({ categories }) {
   const [fontsLoaded] = useFonts({
     Quicksand_700Bold,
     Quicksand_400Regular,
@@ -72,7 +72,7 @@ export default function CategoryView({ categories }) {
           </TouchableOpacity>
         )}
       />
-      <ProductsView products={products} />
+      <ProductsRoutineView products={products} />
     </View>
   );
 };

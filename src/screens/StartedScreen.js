@@ -10,7 +10,7 @@ const slides = [
         caption: 'Discover your unique skin tone and its specific characteristics to make informed skincare choices'
     },
     {
-        image: require('../../assets/images/skintype.png'),
+        image: require('../../assets/images/skintype.jpg'),
         title: 'Skintype',
         caption: 'Discover your unique skin type and create a personalized skincare routine that you truly adore.'
     },

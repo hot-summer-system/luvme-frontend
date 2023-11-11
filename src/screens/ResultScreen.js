@@ -1,10 +1,11 @@
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native'
+import { View, Text, Image, StyleSheet } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { getResultById } from '../api/questions';
 import PinkButton from '../components/PinkButton';
 import { useFonts, Quicksand_700Bold, Quicksand_400Regular } from '@expo-google-fonts/quicksand';
 import { ActivityIndicator } from 'react-native-paper';
+
 
 export default function ResultScreen() {
     const [fontsLoaded] = useFonts({
@@ -15,7 +16,7 @@ export default function ResultScreen() {
     const [result, setResult] = useState(null)
     const [loading, setLoading] = useState(false)
     const route = useRoute();
-    const resultId = route.params?.resultId;
+    const resultId = route.params.resultId;
     async function getResult() {
         try {
             setLoading(true);
@@ -45,15 +46,10 @@ export default function ResultScreen() {
             {result && (
                 <View style={styles.container}>
                     <Image
-                        source={{ uri: result.image }}
+                        source={{ uri: result?.image }}
                         style={styles.image}
                     />
-                    <Text style={styles.resultText}>{result.content}</Text>
-                    {/* <View style={styles.infoContainer}>
-                        <Text style={styles.infoTitle}>Feature of your skin</Text>
-                        <Text style={styles.infoText}>{result.feature1}</Text>
-                        <Text style={styles.infoText}>{result.feature2}</Text>
-                    </View> */}
+                    <Text style={styles.resultText}>{result?.content}</Text>
                     <View style={{ position: 'absolute', bottom: 50 }}>
                         <PinkButton onClick={() => navigation.navigate('Root', { screen: 'Routine' })} text='Routine' />
                         <PinkButton onClick={() => navigation.navigate('Root', { screen: 'Home' })} text='Recommend' />
@@ -72,15 +68,15 @@ const styles = StyleSheet.create({
     },
     image: {
         marginTop: 50,
-        width: 480,
-        height: 200,
+        width: 300,
+        height: 500,
         resizeMode: 'cover',
     },
     resultText: {
         fontSize: 24,
-        fontWeight: 'bold',
         marginBottom: 20,
-        fontFamily:'Quicksand_700Bold'
+        color: '#DC447A',
+        fontFamily: 'Quicksand_700Bold'
     },
     infoContainer: {
         width: '80%',
@@ -94,6 +90,6 @@ const styles = StyleSheet.create({
     infoText: {
         fontSize: 16,
         marginBottom: 10,
-        fontFamily:'Quicksand_400Regular'
+        fontFamily: 'Quicksand_400Regular'
     },
 });

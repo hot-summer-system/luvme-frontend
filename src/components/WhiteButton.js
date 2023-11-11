@@ -18,10 +18,10 @@ export default function WhiteButton(props) {
 const windowWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
     btn: {
-        width: windowWidth - 100,
+        width: windowWidth - 140,
         marginTop: 10,
         borderRadius: 30,
-        paddingVertical: 15,
+        paddingVertical: 12,
         alignSelf: 'center',
         borderStyle: 'solid',
         borderWidth: 1,
@@ -30,7 +30,6 @@ const styles = StyleSheet.create({
     btnText: {
         color: '#ED8AA8',
         fontSize: 18,
-        fontWeight: 'bold',
         textAlign: 'center',
         fontFamily: 'Merriweather_700Bold'
     },

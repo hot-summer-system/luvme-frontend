@@ -18,11 +18,11 @@ export default function PinkButton(props) {
 const windowWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   btn: {
-    width: windowWidth - 100,
+    width: windowWidth - 140,
     marginTop: 10,
     backgroundColor: '#ED8AA8',
     borderRadius: 30,
-    paddingVertical: 15,
+    paddingVertical: 12,
     alignSelf: 'center',
   },
   btnText: {

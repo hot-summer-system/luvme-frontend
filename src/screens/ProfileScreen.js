@@ -2,13 +2,17 @@ import { View, Text, StyleSheet } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import PinkButton from '../components/PinkButton'
 import WhiteButton from '../components/WhiteButton'
-import signOut from 'firebase/auth'
 import { FIREBASE_AUTH } from '../../firebase'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useNavigation } from '@react-navigation/native'
 import { ActivityIndicator } from 'react-native-paper'
+import { signOut } from 'firebase/auth'
+import { useFonts, Quicksand_700Bold } from '@expo-google-fonts/quicksand';
 
 export default function ProfileScreen() {
+  const [fontsLoaded] = useFonts({
+    Quicksand_700Bold,
+  })
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false)
   const navigation = useNavigation();
@@ -31,6 +35,9 @@ export default function ProfileScreen() {
     }
   }
   useEffect(() => { getUserData() }, [])
+  if (!fontsLoaded) {
+    return null
+  }
   if (loading) {
     return (
       <View style={styles.container}>
@@ -40,7 +47,7 @@ export default function ProfileScreen() {
   }
   return (
     <View style={styles.container}>
-      <Text style={styles.name}>User: {user.email}</Text>
+      <Text style={styles.name}>User: {user?.email}</Text>
       <View style={{
         position: 'absolute',
         bottom: 50
@@ -61,6 +68,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 24,
     color: '#DC447A',
-    marginLeft: 10
+    marginLeft: 10,
+    fontFamily: 'Quicksand_700Bold'
   }
 })

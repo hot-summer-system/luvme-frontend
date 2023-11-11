@@ -1,10 +1,10 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { getCategories } from '../api/categories'
-import CategoryView from '../components/CategoryView';
 import { ActivityIndicator } from 'react-native-paper';
+import CategoryRoutineView from '../components/CategoryRoutineView';
 
-export default function HomeScreen() {
+export default function AddProductScreen() {
     const [loading, setLoading] = useState(false)
     const [categories, setCategories] = useState([]);
     async function getAllCategories() {
@@ -31,7 +31,7 @@ export default function HomeScreen() {
     }
     return (
         <View style={styles.container}>
-            <CategoryView categories={categories} />
+            <CategoryRoutineView categories={categories} />
         </View>
     )
 }

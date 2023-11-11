@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useRoute } from '@react-navigation/native';
 import StackNavigator from './src/navigation/StackNavigator';
 import StartedScreen from './src/screens/StartedScreen';
 import * as Google from 'expo-auth-session/providers/google';
@@ -10,6 +10,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 import { login } from './src/api/login'
 import LandingScreen from './src/screens/LandingScreen';
+import { Provider } from 'react-redux';
+import { store } from './src/store/store';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -52,9 +54,10 @@ export default function App() {
         try {
           const idToken = await user.getIdToken()
           await AsyncStorage.setItem("idToken", idToken);
-          console.log("id",idToken)
-          const data = await login();
+          console.log("id", idToken)
+          const data = await login(idToken);
           await AsyncStorage.setItem("@user", JSON.stringify(data))
+          console.log("user", data)
           setUserInfo(data)
         } catch (error) {
           console.error("Error during user data retrieval:", error);
@@ -75,11 +78,13 @@ export default function App() {
     </View>
   )
   return (
-    <View style={styles.container}>
-      <NavigationContainer>
-        {userInfo ? <StackNavigator /> : <StartedScreen promptAsync={promptAsync} />}
-      </NavigationContainer>
-    </View>
+    <Provider store={store}>
+      <View style={styles.container}>
+        <NavigationContainer>
+          {userInfo ? <StackNavigator /> : <StartedScreen promptAsync={promptAsync} />}
+        </NavigationContainer>
+      </View>
+    </Provider>
   );
 }
 

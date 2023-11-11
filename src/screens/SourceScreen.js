@@ -31,10 +31,14 @@ export default function SourceScreen() {
         { name: 'Heart', link: 'https://www.flaticon.com/free-icons/heart' },
         { name: 'User', link: 'https://www.flaticon.com/free-icons/user' },
         { name: 'Routine', link: 'https://www.flaticon.com/free-icons/routine' },
+        { name: 'cancel', link: 'https://www.flaticon.com/free-icons/cancel' }
 
     ]
     const linkImages = [
-        { name: 'Freepik', link: 'https://www.freepik.com/free-vector/hand-drawn-skin-types-collection_12558233.htm#query=skin%20type&from_query=skintype&position=2&from_view=search&track=sph' }
+        { name: 'Skintype by Freepik', link: 'https://www.freepik.com/free-vector/hand-drawn-skin-types-collection_12558233.htm#query=skin%20type&from_query=skintype&position=2&from_view=search&track=sph' },
+        { name: 'Skintype  by Freepik', link: "https://www.freepik.com/free-vector/skin-types-differences-hand-drawn_12395470.htm#page=2&query=skin%20type&position=18&from_view=search&track=ais" },
+        { name: 'Product  by Freepik', link: "https://www.freepik.com/free-photo/collection-beauty-products-with-copy-space_9377183.htm#query=makeup%20product&position=0&from_view=search&track=ais" },
+
     ]
     if (!fontsLoaded) {
         return null
@@ -90,5 +94,6 @@ const styles = StyleSheet.create({
         fontFamily: 'Quicksand_400Regular',
         textAlign: 'center',
         marginBottom: 5,
+        textDecorationLine: 'underline',
     }
 })
