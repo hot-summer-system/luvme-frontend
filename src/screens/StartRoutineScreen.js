@@ -38,8 +38,8 @@ const StartRoutineScreen = () => {
                         alignItems: 'center',
                     }}>
                         <View style={{
-                            position: 'absolute',
-                            bottom: 50,
+                            marginBottom: 50,
+                            marginTop: 10
                         }}>
                             {currentIndex < routingProductResponses.length - 1 ? (
                                 <PinkButton text="Next Step" onClick={() => setCurrentIndex(currentIndex + 1)} />
