@@ -35,7 +35,7 @@ export default function ProductDetailScreen() {
             <Text style={styles.productTitle}>Ingredients</Text>
             {product.productIngredientResponses.map((ingredient) => (
                 <View key={ingredient.productIngredientId}>
-                    <Text style={styles.description}>• {ingredient.ingredientResponse.description}</Text>
+                    <Text style={styles.description}>• {ingredient.ingredientResponse.name}: {ingredient.ingredientResponse.description}</Text>
                 </View>
             ))}
         </ScrollView>

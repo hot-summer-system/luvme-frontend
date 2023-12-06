@@ -29,6 +29,7 @@
         <data android:scheme="luvme-frontend"/>
         <data android:scheme="com.hotsummer.luvme"/>
         <data android:scheme="exp+luvme-frontend"/>
+        <data android:scheme="com.hotsummer.luvmefrontend"/>
       </intent-filter>
     </activity>
     <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" android:exported="false"/>

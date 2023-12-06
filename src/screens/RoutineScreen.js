@@ -24,6 +24,7 @@ export default function RoutineScreen() {
   const [routine, setRoutine] = useState(null);
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [isPremium, setIsPremium] = useState(false);
   async function getRoutineById(userId) {
     try {
       setLoading(true)
@@ -44,6 +45,7 @@ export default function RoutineScreen() {
       setLoading(true);
       const userJSON = await AsyncStorage.getItem("@user")
       const userData = userJSON ? JSON.parse(userJSON) : null;
+      setIsPremium(userData?.isPremium)
       setUserData(userData)
     } catch (error) {
       console.log(error)
@@ -57,7 +59,9 @@ export default function RoutineScreen() {
     }, [])
   );
   useEffect(() => {
-    getRoutineById(userData?.userId)
+    if (isPremium) {
+      getRoutineById(userData?.userId)
+    }
   }, [userData])
   if (!fontsLoaded) {
     return null
@@ -66,6 +70,20 @@ export default function RoutineScreen() {
     return (
       <View style={styles.container}>
         <ActivityIndicator animating={true} size='large' color='#DC447A' />
+      </View>
+    )
+  } else if (!isPremium) {
+    return (
+      <View style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'white'
+      }}>
+        <Text style={styles.title}>
+          You must have premium account to access this function.
+          Please contact 0398202460 for more detail
+        </Text>
       </View>
     )
   } else if (routine === null) {
@@ -132,6 +150,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     marginTop: 10,
+    marginHorizontal: 16,
     color: '#DC447A',
     fontFamily: 'Merriweather_700Bold'
   },
